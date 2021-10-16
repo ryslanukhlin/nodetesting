@@ -5,6 +5,8 @@ import { createConnection } from 'typeorm';
 import User from './model/User';
 import Record from './model/Record';
 import path from 'path';
+import swagger from 'swagger-ui-express';
+import * as swaggerDocs from './swagger.json';
 
 dotenv.config();
 
@@ -13,6 +15,7 @@ const app = express();
 app.use(express.static(path.resolve(__dirname + '/static')));
 app.use(express.json());
 app.use(Routers);
+app.use('/api-docs', swagger.serve, swagger.setup(swaggerDocs));
 
 const run = async () => {
     try {

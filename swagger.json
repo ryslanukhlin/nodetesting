@@ -1,0 +1,285 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "test nodejs",
+        "version": "1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000"
+        }
+    ],
+    "paths": {
+        "/register": {
+            "post": {
+                "tags": ["user"],
+                "summary": "регистрирует нового пользователя",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "example": {
+                                "login": "egor",
+                                "password": "13gf+d3154!"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "пользователь успешно создан"
+                    },
+                    "400": {
+                        "description": "если пользователь зарегестрирован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/errorUserCreated"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "ошибки валидации",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/errorUserValidate"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": ["user"],
+                "summary": "Авторизация пользователя",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "example": {
+                                "login": "egor",
+                                "password": "13gf+d3154!"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Авирпизация прошла успешно",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/token"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Неправильный логин или пароль"
+                    }
+                }
+            }
+        },
+        "/record/{page}": {
+            "get": {
+                "tags": ["record"],
+                "summary": "Получить записи",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "required": true,
+                        "description": "Номер показываемой страницы",
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Записи успешно получены",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/records"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/record/{recordId}": {
+            "patch": {
+                "tags": ["record"],
+                "summary": "Редактирование записи",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "required": true,
+                        "description": "Id записи",
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthTokenBody"
+                            },
+                            "example": {
+                                "token": "Beared gfdgt24grsgfsxgdf..."
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Редактирование прошло успешно"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["record"],
+                "summary": "Удаление записи",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "required": true,
+                        "description": "Id записи",
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthTokenBody"
+                            },
+                            "example": {
+                                "token": "Beared gfdgt24grsgfsxgdf..."
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Удаление прошло успешно"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "login": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "records": {
+                "type": "object",
+                "properties": {
+                    "records": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "date": {
+                                    "type": "string"
+                                },
+                                "typeMessage": {
+                                    "enum": ["text", "file"]
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "AuthTokenBody": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    }
+                }
+            },
+            "token": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    }
+                }
+            },
+            "errorUserCreated": {
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "enum": ["такой пользователь уже зарегистрирован"]
+                    }
+                }
+            },
+            "errorUserValidate": {
+                "type": "object",
+                "properties": {
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "msg": {
+                                    "enum": [
+                                        "Логин должно быть строкой",
+                                        "никнейм должен быть не меньше 3 букв",
+                                        "Пароль должно быть строкой",
+                                        "пароль должен быть не меньше 6 букв"
+                                    ]
+                                },
+                                "param": {
+                                    "enum": ["login", "password"]
+                                },
+                                "location": {
+                                    "enum": ["body"]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
