@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { validationResult } from "express-validator";
+import { NextFunction, Request, Response } from 'express';
+import { validationResult } from 'express-validator';
 
 export const validResult = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -9,6 +9,6 @@ export const validResult = (req: Request, res: Response, next: NextFunction) => 
     }
 
     return res.status(401).json({
-        errors: errors.array()
-    })
-}
+        errors: errors.array(),
+    });
+};
