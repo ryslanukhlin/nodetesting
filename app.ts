@@ -7,11 +7,13 @@ import Record from './model/Record';
 import path from 'path';
 import swagger from 'swagger-ui-express';
 import * as swaggerDocs from './swagger.json';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 
+app.use(cors({ origin: '*' }));
 app.use(express.static(path.resolve(__dirname + '/static')));
 app.use(express.json());
 app.use(Routers);
@@ -30,7 +32,7 @@ const run = async () => {
             synchronize: true,
         });
 
-        app.listen(80, () => {
+        app.listen(8090, () => {
             console.log('server start http://localhost:3000');
         });
     } catch (e) {
