@@ -30,7 +30,7 @@ const run = async () => {
             synchronize: true,
         });
 
-        app.listen(3000, () => {
+        app.listen(80, () => {
             console.log('server start http://localhost:3000');
         });
     } catch (e) {
